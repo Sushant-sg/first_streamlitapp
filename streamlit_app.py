@@ -21,17 +21,24 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 
 streamlit.dataframe(fruits_to_show)
 streamlit.header("Fruityvice Fruit Advice!")
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-streamlit.write('The user entered ', fruit_choice)
-
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+"Kiwi")
-#streamlit.text(fruityvice_response)
-# write your own comment -what does the next line do? 
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-# write your own comment - what does this do?
-streamlit.dataframe(fruityvice_normalized)
-streamlit.stop()
-
+try:
+  
+   fruit_choice = streamlit.text_input('What fruit would you like information about?')
+   if not fruit_choice:
+      streamlit.error('Please select a fruit to get information')
+      #streamlit.write('The user entered ', fruit_choice)
+   else:
+      fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+"Kiwi")
+      #streamlit.text(fruityvice_response)
+      # write your own comment -what does the next line do? 
+      fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+      # write your own comment - what does this do?
+      streamlit.dataframe(fruityvice_normalized)
+#streamlit.stop()
+except URLError as e:
+  streamlit.error()
+  
+'''
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
 my_cur.execute("SELECT * from FRUIT_LOAD_LIST")
@@ -41,4 +48,4 @@ streamlit.dataframe(my_data_row)
 #streamlit.header("next fruit you want to add :")
 add_my_fruit= streamlit.text_input('next fruit you want to add : ?','Jackfruit')
 streamlit.write('The user entered ', add_my_fruit)
-my_cur.execute("insert into FRUIT_LOAD_LIST values('from ')")
+my_cur.execute("insert into FRUIT_LOAD_LIST values('from ')")'''
